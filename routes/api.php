@@ -19,3 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 // Auth
 Route::post('auth', 'TestUserController@auth');
+
+// Save loan
+Route::post('save', 'TestLoanController@save');
