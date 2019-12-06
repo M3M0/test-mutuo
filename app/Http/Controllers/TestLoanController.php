@@ -15,6 +15,7 @@ class TestLoanController extends Controller
         $message = '';
         $res = '';
         $token = '';
+        $con = 0;
 
         try{
             $json =  $request->json()->all();
@@ -23,7 +24,7 @@ class TestLoanController extends Controller
             $token = $json['token'];
             $user = TestUsers::where('token', $token)->first();
             if($user){
-                $res = $user->id;
+                // $res = $user->id;
                 $data = $json['data'];
                 for ($i = 0; $i < count($data); $i++) {
                     $loan = new TestLoans();
@@ -35,7 +36,9 @@ class TestLoanController extends Controller
                     $loan->created_at = $data[$i]['created_at'];
                     $loan->updated_at = $data[$i]['updated_at'];
                     $loan->save();
+                    $con++;
                 }
+                $message = $con . " registros guardados";
             } else {
                 $res = 0;
             }
@@ -49,6 +52,34 @@ class TestLoanController extends Controller
             'code'      => 200,
             'message'   => $message,
             'result'    => $res
+        ], 200);
+    }
+
+    public function get(Request $request){
+        $status = false;
+        $message = '';
+        $token = '';
+        $data = null;
+
+        try{
+            $json =  $request->json()->all();
+            $status = true;
+            $message = 'OK';
+            $token = $json['token'];
+            $user = TestUsers::where('token', $token)->first();
+            if($user){
+                $data = TestLoans::get();
+            } 
+        }
+        catch(Exception $e){
+            $message = 'Error al salvar los datos';
+        }
+
+        return response()->json([
+            'status'    => $status,
+            'code'      => 200,
+            'message'   => $message,
+            'result'    => $data
         ], 200);
     }
 }

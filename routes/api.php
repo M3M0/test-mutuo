@@ -22,3 +22,6 @@ Route::post('auth', 'TestUserController@auth');
 
 // Save loan
 Route::post('save', 'TestLoanController@save');
+
+// Get loan
+Route::post('get', 'TestLoanController@get');
